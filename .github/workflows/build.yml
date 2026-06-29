@@ -17,3 +17,6 @@ jobs:
 
       - name: Build project
         run: make
+
+      - name: Run automated tests
+        run: bash scripts/ci_tests.sh

@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -Wall -Wextra -Wpedantic -std=c11 -g -Iinclude -Isrc
+CFLAGS := -Wall -Wextra -Wpedantic -std=c11 -g -D_POSIX_C_SOURCE=200809L -Iinclude -Isrc
 LDFLAGS := -pthread
 
 SRC := $(wildcard src/*.c)

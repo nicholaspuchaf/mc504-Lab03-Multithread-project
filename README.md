@@ -128,7 +128,7 @@ Depois de compilar:
 ./aeroporto
 ```
 
-No estado atual, o programa inicializa a estrutura base do aeroporto e imprime uma primeira visualizacao no terminal. A simulacao completa das threads de aviao e da torre ainda sera implementada nas proximas etapas.
+Por padrao, o programa executa a simulacao com animacao ASCII no terminal.
 
 Tambem e possivel usar:
 
@@ -137,6 +137,35 @@ make run
 ```
 
 Esse comando compila o projeto, se necessario, e executa o binario.
+
+## Parametros
+
+O programa aceita os seguintes parametros:
+
+```text
+--planes N             Numero total de avioes
+--runways N            Numero de pistas
+--queue-size N         Tamanho maximo das filas
+--landing-prob N       Probabilidade de pouso em porcentagem
+--emergency-prob N     Probabilidade de emergencia entre pousos
+--runway-time-ms N     Tempo de uso da pista em ms
+--arrival-delay-ms N   Intervalo entre chegadas em ms
+--max-landings N       Maximo de pousos consecutivos antes de priorizar decolagem
+--no-animation         Desativa animacao e mostra logs lineares
+--help                 Mostra ajuda
+```
+
+Exemplo com logs, util para testes:
+
+```bash
+./aeroporto --planes 10 --runways 2 --no-animation --runway-time-ms 50 --arrival-delay-ms 5
+```
+
+Exemplo com mais carga:
+
+```bash
+./aeroporto --planes 30 --runways 3 --landing-prob 70 --emergency-prob 15
+```
 
 ## GitHub Actions
 
@@ -150,13 +179,38 @@ Esse workflow executa automaticamente em `push` e `pull_request`, instalando as 
 
 ```bash
 make
+bash scripts/ci_tests.sh
 ```
 
-Assim, o repositorio valida se os arquivos `.c` enviados continuam compilando corretamente.
+Assim, o repositorio valida se os arquivos `.c` enviados continuam compilando corretamente e se a simulacao basica termina sozinha.
+
+## Testes
+
+Os testes automatizados ficam em:
+
+```bash
+scripts/ci_tests.sh
+```
+
+Eles executam cenarios rapidos com `--no-animation`, `--runway-time-ms 1` e `--arrival-delay-ms 0`, validando que todos os avioes terminam e que as filas ficam vazias no final.
+
+Para rodar localmente:
+
+```bash
+make
+bash scripts/ci_tests.sh
+```
+
+Tambem existe um script com cenarios mais pesados e tempos maiores, pensado para visualizar a animacao no terminal:
+
+```bash
+make
+bash scripts/heavy_local_tests.sh
+```
 
 ## Status Atual
 
-O projeto esta na fase de esqueleto inicial.
+O projeto possui uma primeira simulacao funcional.
 
 Ja existem:
 
@@ -165,18 +219,19 @@ Ja existem:
 - Estruturas centrais do aeroporto.
 - Tipos de aviao, pista, configuracao e estado.
 - Fila circular basica.
-- Renderizacao ASCII inicial.
-- Stubs para comportamento de aviao e sincronizacao.
+- Renderizacao ASCII no terminal.
+- Thread da torre de controle.
+- Threads de avioes.
+- Uso de mutex, semaforo e variaveis de condicao.
+- Parametros por linha de comando.
+- Modo `--no-animation` para testes e CI.
 
 Proximas etapas:
 
-- Implementar criacao das threads dos avioes.
-- Implementar a thread da torre.
-- Implementar entrada nas filas.
-- Implementar autorizacao via variaveis de condicao.
-- Implementar ocupacao e liberacao de pistas.
-- Implementar parametros por linha de comando.
-- Melhorar a animacao no terminal.
+- Refinar a animacao para ficar mais didatica no video.
+- Adicionar mais cenarios de teste.
+- Melhorar mensagens e explicacao visual da politica da torre.
+- Ajustar valores padrao conforme a demonstracao final.
 
 ## Documentacao do Planejamento
 
