@@ -18,21 +18,33 @@ static const char *request_type_label(RequestType request)
     return request == REQUEST_LANDING ? "POUSO" : "DECOLAGEM";
 }
 
-static void print_queue(const char *label, const Queue *queue)
+static void print_separator(const char *title)
 {
-    printf("  %-12s ", label);
+    printf("\n+---------------- %s ----------------+\n\n", title);
+}
 
-    if (queue->size == 0) {
-        printf("[vazia]\n");
-        return;
+static void print_queue_slots(const char *label, const Queue *queue, int mark_emergency)
+{
+    const int visible_slots_limit = 10;
+    int visible_slots = queue->capacity < visible_slots_limit ? queue->capacity : visible_slots_limit;
+
+    printf("  %s %d/%d\n", label, queue->size, queue->capacity);
+    printf("  ");
+
+    for (int i = 0; i < visible_slots; i++) {
+        if (i < queue->size) {
+            int index = (queue->head + i) % queue->capacity;
+            printf("[%cA%02d ]", mark_emergency ? '!' : ' ', queue->items[index]);
+        } else {
+            printf("[ ... ]");
+        }
     }
 
-    for (int i = 0; i < queue->size; i++) {
-        int index = (queue->head + i) % queue->capacity;
-        printf("A%02d ", queue->items[index]);
+    if (queue->capacity > visible_slots) {
+        printf(" ... +%d lugares", queue->capacity - visible_slots);
     }
 
-    printf("\n");
+    printf("\n\n");
 }
 
 void render_airport(const Airport *airport)
@@ -42,9 +54,14 @@ void render_airport(const Airport *airport)
     }
 
     if (!airport->config.no_animation) {
-    printf("\033[2J\033[H");
+        printf("\033[2J\033[H");
     }
-    printf("AEROPORTO - TORRE DE CONTROLE\n\n");
+
+    printf("+=================================================+\n");
+    printf("|          AEROPORTO - TORRE DE CONTROLE          |\n");
+    printf("+=================================================+\n\n");
+
+    print_separator("PARAMETROS");
     printf("Parametros:\n");
     printf("  Avioes: %d | Pistas: %d | Fila max: %d\n",
            airport->config.total_planes,
@@ -59,6 +76,7 @@ void render_airport(const Airport *airport)
     printf("  Max. pousos consecutivos: %d\n\n",
            airport->config.max_consecutive_landings);
 
+    print_separator("PISTAS");
     printf("Pistas:\n");
 
     for (int i = 0; i < airport->config.runway_count; i++) {
@@ -74,19 +92,19 @@ void render_airport(const Airport *airport)
         }
     }
 
-    printf("\nFilas:\n");
-    print_queue("Emergencia:", &airport->emergency_landing_queue);
-    print_queue("Pouso:", &airport->landing_queue);
-    print_queue("Decolagem:", &airport->takeoff_queue);
+    print_separator("FILAS");
+    print_queue_slots("Emergencia:", &airport->emergency_landing_queue, 1);
+    print_queue_slots("Pouso:", &airport->landing_queue, 0);
+    print_queue_slots("Decolagem:", &airport->takeoff_queue, 0);
 
-    printf("\nEstatisticas:\n");
+    print_separator("ESTATISTICAS");
     printf("  Concluidos: %d/%d\n", airport->completed_planes, airport->config.total_planes);
     printf("  Pousos: %d | Decolagens: %d | Emergencias: %d\n",
            airport->landings_completed,
            airport->takeoffs_completed,
            airport->emergencies_completed);
 
-    printf("\nPolitica da torre:\n");
+    print_separator("POLITICA");
     printf("  Pousos consecutivos: %d/%d\n",
            airport->config.landing_count_before_takeoff,
            airport->config.max_consecutive_landings);

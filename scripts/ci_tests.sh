@@ -15,9 +15,9 @@ run_and_assert() {
     timeout "${TIMEOUT}" "${BIN}" "$@" > "${output_file}"
 
     grep -q "Concluidos: ${expected_completed}/${expected_completed}" "${output_file}"
-    grep -q "Emergencia:  \\[vazia\\]" "${output_file}"
-    grep -q "Pouso:       \\[vazia\\]" "${output_file}"
-    grep -q "Decolagem:   \\[vazia\\]" "${output_file}"
+    grep -q "Emergencia: 0/" "${output_file}"
+    grep -q "Pouso: 0/" "${output_file}"
+    grep -q "Decolagem: 0/" "${output_file}"
 
     rm -f "${output_file}"
 }
@@ -64,9 +64,9 @@ timeout "${TIMEOUT}" "${BIN}" \
 
 grep -q "Concluidos: 20/20" "${emergency_output}"
 grep -q "Emergencias: 20" "${emergency_output}"
-grep -q "Emergencia:  \\[vazia\\]" "${emergency_output}"
-grep -q "Pouso:       \\[vazia\\]" "${emergency_output}"
-grep -q "Decolagem:   \\[vazia\\]" "${emergency_output}"
+grep -q "Emergencia: 0/" "${emergency_output}"
+grep -q "Pouso: 0/" "${emergency_output}"
+grep -q "Decolagem: 0/" "${emergency_output}"
 rm -f "${emergency_output}"
 
 echo "Todos os testes de CI passaram."
