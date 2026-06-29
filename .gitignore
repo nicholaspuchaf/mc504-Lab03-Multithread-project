@@ -1,0 +1,32 @@
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+aeroporto
+
+# Debug/profiling artifacts
+*.out
+*.log
+*.gcda
+*.gcno
+*.gcov
+core
+core.*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
