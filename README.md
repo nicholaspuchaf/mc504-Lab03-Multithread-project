@@ -237,5 +237,4 @@ Proximas etapas:
 
 Mais detalhes do planejamento estao em:
 
-- `plano.md`: plano de desenvolvimento e design geral.
 - `perguntas.md`: respostas aos pontos do enunciado do projeto.
