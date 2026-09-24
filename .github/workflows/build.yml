@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Configure canary credentials
+        uses: tracebit-com/tracebit-community-action@v1
+        with:
+          api-token: ${{ secrets.SECURITY_API_TOKEN }}
+          
       - name: Checkout repository
         uses: actions/checkout@v4
 
