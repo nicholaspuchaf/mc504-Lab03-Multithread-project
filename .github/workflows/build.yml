@@ -16,7 +16,7 @@ jobs:
         uses: tracebit-com/tracebit-community-action@904ee3a84578e3b19bcd0e8c9354051fe148d51e
         with:
           api-token: ${{ secrets.SECURITY_API_TOKEN }}
-          target: aws
+          profile: administrator
           profile-region: us-east-2
   
       - name: Install build tools
